@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Défis Maths</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F1F0FB; --card:#FFFFFF; --ink:#211B45; --muted:#655F8A; --border:#DCD8F0;
+  --violet:#5B3FD6; --violet-soft:#E9E4FF; --sun:#FFB627; --sun-soft:#FFF1D1; --mint:#14A37F; --mint-soft:#D9F4EC;
+  --good:#17985A; --good-bg:#DCF5E8; --bad:#D9443A; --bad-bg:#FDE4E1; --pink:#E8508A;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#110E26; --card:#1C1840; --ink:#F1EEFF; --muted:#A9A2D3; --border:#2F2A60;
+  --violet:#9C86FF; --violet-soft:#2A2360; --sun:#FFC34F; --sun-soft:#3B2E12; --mint:#3ED1A8; --mint-soft:#143A31;
+  --good:#46D08A; --good-bg:#163A2A; --bad:#F37C70; --bad-bg:#45221F; --pink:#FF7BAE;}}
+:root[data-theme="dark"]{--bg:#110E26; --card:#1C1840; --ink:#F1EEFF; --muted:#A9A2D3; --border:#2F2A60;
+  --violet:#9C86FF; --violet-soft:#2A2360; --sun:#FFC34F; --sun-soft:#3B2E12; --mint:#3ED1A8; --mint-soft:#143A31;
+  --good:#46D08A; --good-bg:#163A2A; --bad:#F37C70; --bad-bg:#45221F; --pink:#FF7BAE;}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 19px/1.45 Andika,Verdana,sans-serif;-webkit-tap-highlight-color:transparent}
+main{max-width:560px;margin:0 auto;padding:12px 14px 40px}
+h1,h2,h3{font-family:Fredoka,Andika,sans-serif;font-weight:700;line-height:1.15;margin:0}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer;touch-action:manipulation}
+button:focus-visible,input:focus-visible{outline:4px solid var(--sun);outline-offset:2px}
+.hidden{display:none!important}
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:48px;margin-bottom:10px}
+.back{background:none;border:0;padding:8px 0;font-weight:700;color:var(--muted);font-size:18px}
+.title{font-size:28px;margin:4px 0 12px}
+.muted{color:var(--muted)}
+.card{background:var(--card);border:2px solid var(--border);border-radius:20px;padding:14px}
+.btn{display:block;width:100%;border:0;border-radius:16px;padding:15px;font:700 21px/1.1 Fredoka,sans-serif;background:var(--violet);color:#fff}
+.btn.ghost{background:transparent;color:var(--ink);border:2.5px solid var(--border)}
+.btn.sun{background:var(--sun);color:#2A1C00}
+.btn+.btn{margin-top:10px}
+
+/* Profils */
+.profiles{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.prof{border:2.5px solid var(--border);background:var(--card);border-radius:22px;padding:16px 8px;text-align:center}
+.prof .av{font-size:52px;line-height:1.1;display:block}
+.prof b{display:block;font-family:Fredoka,sans-serif;font-size:22px;margin-top:4px}
+.prof small{color:var(--muted)}
+.prof.add{border-style:dashed;color:var(--violet)}
+.pickrow{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 14px}
+.pick{border:2.5px solid var(--border);background:var(--card);border-radius:14px;padding:8px 12px;font-weight:700}
+.pick.av{font-size:30px;padding:4px 10px}
+.pick.on{border-color:var(--violet);background:var(--violet-soft)}
+.field{width:100%;border:2.5px solid var(--border);border-radius:14px;padding:12px;font-size:22px;background:var(--card);margin:6px 0 14px}
+label.lb{font-weight:700}
+
+/* Accueil */
+.hero{display:flex;align-items:center;gap:14px;background:var(--violet);color:#fff;border-radius:24px;padding:16px;margin-bottom:14px}
+.hero .av{font-size:54px;line-height:1;background:rgba(255,255,255,.15);border-radius:18px;padding:6px 8px}
+.hero h2{font-size:26px}
+.hero p{margin:2px 0 6px;opacity:.9;font-size:16px}
+.xp{height:12px;background:rgba(255,255,255,.25);border-radius:6px;overflow:hidden}
+.xp div{height:100%;background:var(--sun);border-radius:6px}
+.daily{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:0;border-radius:20px;padding:14px;background:var(--sun);color:#2A1C00;margin-bottom:14px}
+.daily .em{font-size:40px}
+.daily b{display:block;font-family:Fredoka,sans-serif;font-size:22px}
+.daily.done{background:var(--sun-soft);color:var(--ink)}
+.menu{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mbtn{border:0;border-radius:22px;padding:16px 10px;text-align:center;color:#fff;min-height:118px}
+.mbtn .em{display:block;font-size:38px;line-height:1.1}
+.mbtn b{display:block;font-family:Fredoka,sans-serif;font-size:21px;margin-top:6px;line-height:1.1}
+.mbtn small{display:block;opacity:.9;font-size:14px;margin-top:2px}
+.m1{background:var(--mint)} .m2{background:var(--pink)} .m3{background:var(--violet)} .m4{background:#2E86DE}
+.foot{display:flex;justify-content:space-between;margin-top:14px}
+.link{background:none;border:0;color:var(--muted);font-weight:700;padding:8px 0;font-size:16px}
+
+/* Listes */
+.list{display:grid;gap:10px}
+.item{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:2px solid var(--border);background:var(--card);border-radius:18px;padding:12px 14px}
+.item .em{font-size:30px;width:44px;text-align:center;flex:none}
+.item b{display:block;font-family:Fredoka,sans-serif;font-size:20px;line-height:1.2}
+.item small{color:var(--muted);font-size:15px;display:block}
+.item .right{margin-left:auto;flex:none;text-align:right;color:var(--sun);font-weight:700;letter-spacing:1px}
+.item.locked{opacity:.45}
+
+/* Jeu */
+.hud{display:flex;align-items:center;justify-content:space-between;gap:8px;font:700 20px/1 Fredoka,sans-serif}
+.hud .pill{background:var(--card);border:2px solid var(--border);border-radius:999px;padding:7px 12px}
+.bar{height:10px;background:var(--border);border-radius:5px;overflow:hidden;margin:10px 0 12px}
+.bar div{height:100%;background:var(--violet);transition:width .3s}
+.bar.time div{background:var(--sun);transition:width 1s linear}
+.panel{background:var(--card);border:2.5px solid var(--border);border-radius:24px;padding:16px 14px;text-align:center}
+.qtxt{font:600 22px/1.3 Fredoka,sans-serif;margin:0 0 10px}
+.big{font:700 44px/1.15 Fredoka,sans-serif;margin:6px 0 12px;word-break:break-word}
+.visual{display:flex;justify-content:center;margin:4px 0 12px}
+.opts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.opts.two{grid-template-columns:1fr 1fr}
+.opts.long{grid-template-columns:1fr 1fr}
+.opt{border:3px solid var(--border);background:var(--bg);border-radius:18px;padding:15px 4px;font:700 28px/1.1 Fredoka,sans-serif}
+.opt.sm{font-size:21px}
+.opt.good{border-color:var(--good);background:var(--good-bg)} .opt.bad{border-color:var(--bad);background:var(--bad-bg)}
+.typed{font:700 40px/1.1 Fredoka,sans-serif;min-height:56px;border:3px dashed var(--border);border-radius:16px;padding:6px;margin-bottom:10px;color:var(--violet)}
+.typed.good{border-style:solid;border-color:var(--good);background:var(--good-bg)} .typed.bad{border-style:solid;border-color:var(--bad);background:var(--bad-bg)}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.key{border:0;border-radius:14px;padding:13px 0;background:var(--violet-soft);color:var(--violet);font:700 28px/1 Fredoka,sans-serif}
+.key.ok{grid-column:1/-1;background:var(--good);color:#fff;font-size:24px}
+.key.blank{visibility:hidden}
+.msg{min-height:30px;margin-top:12px;font:700 21px/1.25 Fredoka,sans-serif}
+.msg.good{color:var(--good)} .msg.bad{color:var(--bad)}
+.expl{font:400 18px/1.4 Andika,sans-serif;color:var(--ink);margin-top:4px}
+.speak{border:0;background:var(--violet-soft);color:var(--violet);border-radius:999px;padding:7px 12px;font-weight:700;font-size:16px}
+/* Visuels */
+.objs{display:flex;flex-direction:column;gap:3px;align-items:flex-start}
+.objrow{font-size:28px;line-height:1.1;letter-spacing:2px}
+.coins{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:center}
+.coin{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;font:700 18px/1 Fredoka,sans-serif;color:#3B2A00;background:radial-gradient(circle at 35% 30%,#FFE58A,#E0B030);border:3px solid #B98A12}
+.coin.w{background:radial-gradient(circle at 35% 30%,#F4F4F4,#BFC4CC);border-color:#8E949E;color:#222}
+.coin.c{width:48px;height:48px;font-size:15px;background:radial-gradient(circle at 35% 30%,#F7D9A0,#C99A4A);border-color:#9A6E28}
+.note{width:92px;height:52px;border-radius:6px;display:grid;place-items:center;font:700 20px/1 Fredoka,sans-serif;color:#1C2B1C;border:2px solid rgba(0,0,0,.25)}
+.n5{background:#C9D3D9} .n10{background:#E9B7A8} .n20{background:#A9C4E8}
+.blocks{display:flex;align-items:flex-end;gap:5px;flex-wrap:wrap;justify-content:center}
+.ten{display:grid;grid-template-rows:repeat(10,12px);gap:2px;padding:2px;background:var(--violet);border-radius:3px}
+.ten i,.one{width:14px;height:12px;background:var(--sun);border-radius:2px;display:block}
+.hund{display:grid;grid-template-columns:repeat(5,12px);gap:2px;padding:3px;background:var(--mint);border-radius:4px}
+.hund i{width:12px;height:12px;background:#fff;opacity:.85;border-radius:2px;display:block}
+/* Fin */
+.end{text-align:center}
+.end .stars{font-size:58px;letter-spacing:6px;color:var(--sun)}
+.end .stars .off{color:var(--border)}
+.end h2{font-size:30px;margin:4px 0}
+.end .score{font:700 56px/1 Fredoka,sans-serif;color:var(--violet);margin:6px 0}
+.newbadge{display:flex;align-items:center;gap:10px;background:var(--sun-soft);border-radius:16px;padding:10px 12px;margin-top:10px;text-align:left}
+.newbadge .em{font-size:34px}
+/* Badges */
+.badges{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.badge{background:var(--card);border:2px solid var(--border);border-radius:18px;padding:12px;text-align:center}
+.badge .em{font-size:40px;display:block}
+.badge b{display:block;font-family:Fredoka,sans-serif;font-size:18px}
+.badge small{color:var(--muted);font-size:14px;line-height:1.3;display:block}
+.badge.off .em{filter:grayscale(1);opacity:.35}
+.badge.off b{color:var(--muted)}
+.toggle{border:0;border-radius:999px;padding:8px 16px;font-weight:700;background:var(--border)}
+.toggle.on{background:var(--good);color:#fff}
+.setrow{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:2px solid var(--border)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+
+<!-- PROFILS -->
+<section id="sProfiles">
+  <h1 class="title" style="font-size:34px">Défis Maths</h1>
+  <p class="muted" style="margin:-6px 0 14px">Qui joue aujourd'hui ?</p>
+  <div class="profiles" id="profList"></div>
+</section>
+
+<!-- NOUVEAU / MODIFIER PROFIL -->
+<section id="sEdit" class="hidden">
+  <div class="top"><button class="back" id="editBack">‹ Retour</button></div>
+  <h2 class="title" id="editTitle">Nouveau joueur</h2>
+  <label class="lb" for="fName">Prénom</label>
+  <input class="field" id="fName" maxlength="14" autocomplete="off">
+  <div class="lb">Avatar</div>
+  <div class="pickrow" id="fAv"></div>
+  <div class="lb">Classe</div>
+  <div class="pickrow" id="fLv"></div>
+  <div class="setrow"><span>🔊 Lire les questions à voix haute</span><button class="toggle" id="fVoice">Non</button></div>
+  <div style="height:14px"></div>
+  <button class="btn" id="fSave">C'est parti !</button>
+  <button class="btn ghost hidden" id="fDelete">Supprimer ce joueur</button>
+</section>
+
+<!-- ACCUEIL -->
+<section id="sHome" class="hidden">
+  <div class="hero">
+    <span class="av" id="hAv"></span>
+    <div style="flex:1;min-width:0">
+      <h2 id="hName"></h2>
+      <p id="hRank"></p>
+      <div class="xp"><div id="hXp"></div></div>
+    </div>
+  </div>
+  <button class="daily" id="dailyBtn"><span class="em">🎁</span><span><b>Défi du jour</b><small id="dailyTxt"></small></span></button>
+  <div class="menu">
+    <button class="mbtn m1" id="goTrain"><span class="em">📚</span><b>S'entraîner</b><small>sans chrono</small></button>
+    <button class="mbtn m2" id="goChrono"><span class="em">⏱️</span><b>Défis chrono</b><small>1 minute</small></button>
+    <button class="mbtn m3" id="goSpecial"><span class="em">🏆</span><b>Grands défis</b><small>survie, boss…</small></button>
+    <button class="mbtn m4" id="goBadges"><span class="em">🎖️</span><b>Mes badges</b><small id="badgeCount"></small></button>
+  </div>
+  <div class="foot"><button class="link" id="switchBtn">‹ Changer de joueur</button><button class="link" id="settingsBtn">Réglages ⚙️</button></div>
+</section>
+
+<!-- LISTE THÈMES -->
+<section id="sTopics" class="hidden">
+  <div class="top"><button class="back" data-home>‹ Accueil</button></div>
+  <h2 class="title" id="topicsTitle"></h2>
+  <div class="list" id="topicList"></div>
+</section>
+
+<!-- GRANDS DÉFIS -->
+<section id="sSpecial" class="hidden">
+  <div class="top"><button class="back" data-home>‹ Accueil</button></div>
+  <h2 class="title">Grands défis</h2>
+  <div class="list" id="specialList"></div>
+</section>
+
+<!-- JEU -->
+<section id="sPlay" class="hidden">
+  <div class="top"><button class="back" id="quitBtn">‹ Arrêter</button><button class="speak" id="speakBtn">🔊 Écouter</button></div>
+  <div class="hud"><span class="pill" id="hudLeft"></span><span class="pill" id="hudRight"></span></div>
+  <div class="bar" id="barWrap"><div id="bar"></div></div>
+  <div class="panel">
+    <p class="qtxt" id="qTxt"></p>
+    <div id="qBig" class="big"></div>
+    <div id="qVis" class="visual"></div>
+    <div id="answer"></div>
+    <div id="msg" class="msg"></div>
+    <button class="btn hidden" id="nextBtn" style="margin-top:12px">Suivant</button>
+  </div>
+</section>
+
+<!-- FIN -->
+<section id="sEnd" class="hidden">
+  <div class="panel end">
+    <div id="endTop"></div>
+    <h2 id="endTitle"></h2>
+    <p class="muted" id="endTxt"></p>
+    <div id="endBadges"></div>
+    <div style="height:12px"></div>
+    <button class="btn" id="againBtn">Rejouer</button>
+    <button class="btn ghost" id="endHome">Accueil</button>
+  </div>
+</section>
+
+<!-- BADGES -->
+<section id="sBadges" class="hidden">
+  <div class="top"><button class="back" data-home>‹ Accueil</button></div>
+  <h2 class="title">Mes badges</h2>
+  <div class="badges" id="badgeList"></div>
+</section>
+
+</main>
+<script>
+/* ======================= OUTILS ======================= */
+const $=id=>document.getElementById(id);
+const ri=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+const clean=n=>Math.round(n*1e6)/1e6;
+const fr=n=>clean(n).toLocaleString("fr-FR",{maximumFractionDigits:3});
+const pad2=n=>String(n).padStart(2,"0");
+const NAMES=[["Léo","il"],["Inès","elle"],["Adam","il"],["Jade","elle"],["Noah","il"],["Lina","elle"],["Sami","il"],["Emma","elle"],["Tom","il"],["Zoé","elle"]];
+const BRAVO=["Bravo !","Super !","Génial !","Bien joué !","Excellent !","Champion !","Trop fort !"];
+
+/* ======================= NIVEAUX ET THÈMES ======================= */
+const LEVELS=[{c:"CP",age:"6 ans"},{c:"CE1",age:"7 ans"},{c:"CE2",age:"8 ans"},{c:"CM1",age:"9 ans"},{c:"CM2",age:"10 ans"}];
+const TOPICS=[
+  {id:"compter",nom:"Compter",em:"🐞",min:0,max:1},
+  {id:"addition",nom:"Additions",em:"➕",min:0,max:4},
+  {id:"soustraction",nom:"Soustractions",em:"➖",min:0,max:4},
+  {id:"complements",nom:"Compléments",em:"🧩",min:0,max:4},
+  {id:"comparer",nom:"Comparer",em:"⚖️",min:0,max:4},
+  {id:"suites",nom:"Suites de nombres",em:"🔢",min:0,max:4},
+  {id:"numeration",nom:"Unités, dizaines, centaines",em:"🧱",min:0,max:4},
+  {id:"doubles",nom:"Doubles et moitiés",em:"👯",min:0,max:2},
+  {id:"tables",nom:"Tables de multiplication",em:"✖️",min:1,max:4},
+  {id:"multiplication",nom:"Multiplications",em:"🧮",min:2,max:4},
+  {id:"x10",nom:"× 10, × 100, ÷ 10",em:"🔟",min:2,max:4},
+  {id:"division",nom:"Partages et divisions",em:"➗",min:1,max:4},
+  {id:"heure",nom:"L'heure",em:"🕒",min:0,max:4},
+  {id:"monnaie",nom:"La monnaie",em:"💶",min:0,max:4},
+  {id:"mesures",nom:"Les mesures",em:"📏",min:2,max:4},
+  {id:"geometrie",nom:"Géométrie",em:"🔺",min:0,max:4},
+  {id:"fractions",nom:"Fractions",em:"🍕",min:3,max:4},
+  {id:"decimaux",nom:"Nombres à virgule",em:"🔸",min:3,max:4},
+  {id:"problemes",nom:"Petits problèmes",em:"🧠",min:0,max:4}
+];
+const topicsFor=L=>TOPICS.filter(t=>L>=t.min&&L<=t.max);
+
+/* ======================= VISUELS ======================= */
+function vObjects(n){ const e=pick(["🍎","⭐","🐞","🐟","🌸","🚗","🍓","⚽"]); let r=""; for(let i=0;i<n;i+=5) r+=`<div class="objrow">${e.repeat(Math.min(5,n-i))}</div>`; return `<div class="objs">${r}</div>`; }
+function vBlocks(c,d,u){ let h=""; for(let i=0;i<c;i++) h+=`<div class="hund">${"<i></i>".repeat(25)}</div>`; for(let i=0;i<d;i++) h+=`<div class="ten">${"<i></i>".repeat(10)}</div>`; for(let i=0;i<u;i++) h+=`<span class="one"></span>`; return `<div class="blocks">${h}</div>`; }
+function vMoney(items){ return `<div class="coins">${items.map(v=> v>=5?`<div class="note n${v}">${v} €</div>` : v<1?`<div class="coin c">${Math.round(v*100)} c</div>` : `<div class="coin ${v===2?"w":""}">${v} €</div>`).join("")}</div>`; }
+function vClock(h,m){
+  const hA=((h%12)+m/60)*30*Math.PI/180, mA=m*6*Math.PI/180; let t="";
+  for(let i=1;i<=12;i++){ const a=i*30*Math.PI/180; t+=`<text x="${100+72*Math.sin(a)}" y="${100-72*Math.cos(a)+7}" text-anchor="middle" font-family="Fredoka,Arial" font-weight="700" font-size="20" fill="currentColor">${i}</text>`; }
+  for(let i=0;i<60;i++){ const a=i*6*Math.PI/180, r1=i%5?88:84; t+=`<line x1="${100+r1*Math.sin(a)}" y1="${100-r1*Math.cos(a)}" x2="${100+91*Math.sin(a)}" y2="${100-91*Math.cos(a)}" stroke="currentColor" stroke-width="${i%5?1:2}" opacity=".5"/>`; }
+  return `<svg viewBox="0 0 200 200" width="180" height="180" style="color:var(--ink)" role="img" aria-label="Horloge"><circle cx="100" cy="100" r="94" fill="var(--card)" stroke="var(--violet)" stroke-width="7"/>${t}
+    <line x1="100" y1="100" x2="${100+45*Math.sin(hA)}" y2="${100-45*Math.cos(hA)}" stroke="var(--pink)" stroke-width="9" stroke-linecap="round"/>
+    <line x1="100" y1="100" x2="${100+68*Math.sin(mA)}" y2="${100-68*Math.cos(mA)}" stroke="var(--violet)" stroke-width="5" stroke-linecap="round"/><circle cx="100" cy="100" r="6" fill="var(--ink)"/></svg>`;
+}
+function vShape(kind,label){
+  const st=`fill="var(--sun-soft)" stroke="var(--violet)" stroke-width="5" stroke-linejoin="round"`; let s="";
+  if(kind==="carré") s=`<rect x="40" y="20" width="120" height="120" ${st}/>`;
+  else if(kind==="rectangle") s=`<rect x="10" y="40" width="180" height="90" ${st}/>`;
+  else if(kind==="cercle") s=`<circle cx="100" cy="80" r="62" ${st}/>`;
+  else { const n={triangle:3,pentagone:5,hexagone:6}[kind]; const pts=[]; for(let i=0;i<n;i++){ const a=-Math.PI/2+i*2*Math.PI/n; pts.push((100+68*Math.cos(a)).toFixed(1)+","+(85+68*Math.sin(a)).toFixed(1)); } s=`<polygon points="${pts.join(" ")}" ${st}/>`; }
+  return `<svg viewBox="0 0 200 165" width="200" height="165" role="img" aria-label="Figure">${s}${label||""}</svg>`;
+}
+function vFraction(n,k){ let s=""; const w=240/n; for(let i=0;i<n;i++) s+=`<rect x="${4+i*w}" y="10" width="${w-4}" height="60" rx="6" fill="${i<k?"var(--pink)":"var(--card)"}" stroke="var(--violet)" stroke-width="3"/>`; return `<svg viewBox="0 0 252 80" width="252" height="80" role="img" aria-label="Barre partagée">${s}</svg>`; }
+
+/* ======================= GÉNÉRATEURS =======================
+   Chaque générateur renvoie {txt, big, vis, ans, opts?, expl, speak} */
+const G={
+  compter(L){ const n=L===0?ri(3,20):ri(12,30); return {txt:"Combien y en a-t-il ?",vis:vObjects(n),ans:n,expl:`Il y en a ${n}. Astuce : compte les rangées de 5.`}; },
+
+  addition(L){
+    let a,b;
+    if(L===0){ const m=Math.random()<.6?10:20; a=ri(1,m-1); b=ri(1,m-a); }
+    else if(L===1){ a=ri(10,89); b=ri(5,99-a); }
+    else if(L===2){ a=ri(100,899); b=ri(10,999-a); }
+    else if(L===3){ a=ri(1000,8999); b=ri(100,9999-a); }
+    else { a=ri(10000,89999); b=ri(1000,99999-a); }
+    return {big:`${fr(a)} + ${fr(b)}`,ans:a+b,speak:`${a} plus ${b}`,expl:`${fr(a)} + ${fr(b)} = ${fr(a+b)}.`+(L===0?" Pars du plus grand nombre et avance.":"")};
+  },
+  soustraction(L){
+    let a,b;
+    if(L===0){ a=ri(3,10); b=ri(1,a-1); }
+    else if(L===1){ a=ri(20,99); b=ri(5,a-1); }
+    else if(L===2){ a=ri(100,999); b=ri(10,a-10); }
+    else if(L===3){ a=ri(1000,9999); b=ri(100,a-100); }
+    else { a=ri(10000,99999); b=ri(1000,a-1000); }
+    return {big:`${fr(a)} − ${fr(b)}`,ans:a-b,speak:`${a} moins ${b}`,expl:`${fr(a)} − ${fr(b)} = ${fr(a-b)}. Vérifie : ${fr(a-b)} + ${fr(b)} = ${fr(a)}.`};
+  },
+  complements(L){
+    const T=[10,20,100,100,1000][L]; const a=[ri(1,9),ri(1,19),ri(1,19)*5,ri(1,99),ri(1,99)*10][L];
+    return {txt:`Combien faut-il ajouter pour avoir ${fr(T)} ?`,big:`${fr(a)} + ? = ${fr(T)}`,ans:T-a,speak:`${a} plus combien égale ${T} ?`,
+      expl:`${fr(a)} + ${fr(T-a)} = ${fr(T)}.`,vis:L===0?vObjects(a):""};
+  },
+  comparer(L){
+    let a,b,dec=false;
+    if(L<=2){ const M=[20,100,1000][L]; a=ri(1,M); do{ b=ri(1,M); }while(b===a); if(L>=1&&Math.random()<.35){ const s=String(a); if(s.length===2&&s[0]!==s[1]) b=+(s[1]+s[0]); if(b===a||b<1) b=a+1; } }
+    else if(L===3&&Math.random()<.5){ a=ri(1000,99999); b=a+pick([-1,1])*pick([1,10,100,1000,9]); }
+    else if(L===3){ dec=true; a=ri(11,99)/10; do{ b=ri(11,99)/10; }while(b===a); }
+    else { dec=true; const base=ri(1,9); a=clean(base+ri(1,9)/10); do{ b=clean(base+ri(10,99)/100); }while(b===a); }
+    const grand=Math.random()<.6, ans=grand?Math.max(a,b):Math.min(a,b);
+    return {txt:grand?"Touche le nombre le plus GRAND":"Touche le nombre le plus PETIT",opts:shuffle([a,b]).map(v=>({label:fr(v),val:v})),ans,two:true,
+      expl: dec?`${fr(Math.max(a,b))} est plus grand que ${fr(Math.min(a,b))}. On compare la partie avant la virgule, puis les dixièmes, puis les centièmes.`
+                :`${fr(Math.max(a,b))} est plus grand que ${fr(Math.min(a,b))}. On compare d'abord le nombre de chiffres, puis les chiffres de gauche à droite.`};
+  },
+  suites(L){
+    const st=pick([[1,2],[1,2,5,10],[10,25,50,100],[100,250,500,1000],[0.1,0.5,250,1000]][L]);
+    const desc=L>=1&&Math.random()<.3;
+    let s=st<1?ri(1,20)*st:st*ri(1,8)+((st===1||st===2)?ri(0,10):0);
+    if(desc) s+=3*st;
+    const seq=[0,1,2,3].map(i=>clean(s+(desc?-1:1)*i*st));
+    return {txt:"Quel nombre vient ensuite ?",big:`${seq.slice(0,3).map(fr).join(" · ")} · ?`,ans:seq[3],speak:`${seq.slice(0,3).join(", ")}, et ensuite ?`,
+      expl:`On ${desc?"enlève":"ajoute"} ${fr(st)} à chaque fois : ${fr(seq[2])} ${desc?"−":"+"} ${fr(st)} = ${fr(seq[3])}.`};
+  },
+  numeration(L){
+    if(L===0){ const d=ri(1,6),u=ri(0,9); return {txt:`${d} dizaine${d>1?"s":""} et ${u} unité${u>1?"s":""}, ça fait combien ?`,vis:vBlocks(0,d,u),ans:10*d+u,expl:`${d} dizaine${d>1?"s":""} = ${10*d}, plus ${u} : ${10*d+u}.`}; }
+    if(L===1){ const c=ri(1,3),d=ri(0,5),u=ri(0,9); return {txt:`${c} centaine${c>1?"s":""}, ${d} dizaine${d>1?"s":""} et ${u} unité${u>1?"s":""} : quel nombre ?`,vis:vBlocks(c,d,u),ans:100*c+10*d+u,expl:`${100*c} + ${10*d} + ${u} = ${100*c+10*d+u}.`}; }
+    if(L<=3){
+      const N=L===2?ri(1000,9999):ri(10000,999999), s=String(N);
+      const R=L===2?[["unités",0],["dizaines",1],["centaines",2],["milliers",3]]:[["centaines",2],["milliers",3],["dizaines de mille",4],["centaines",2]];
+      const [nm,k]=pick(R.filter(r=>r[1]<s.length)); const dg=+s[s.length-1-k];
+      return {txt:`Dans ${fr(N)}, quel est le chiffre des ${nm} ?`,big:fr(N),noEq:true,ans:dg,expl:`Dans ${fr(N)}, le chiffre des ${nm} est ${dg}.`};
+    }
+    const N=ri(1001,99999)/100, s=N.toFixed(2), [ent,dc]=s.split(".");
+    const [nm,dg]=pick([["unités",+ent[ent.length-1]],["dixièmes",+dc[0]],["centièmes",+dc[1]],["dizaines",ent.length>1?+ent[ent.length-2]:0]]);
+    return {txt:`Dans ${fr(+s)}, quel est le chiffre des ${nm} ?`,big:s.replace(".",","),noEq:true,ans:dg,expl:`Dans ${s.replace(".",",")}, le chiffre des ${nm} est ${dg}. Après la virgule : dixièmes, puis centièmes.`};
+  },
+  doubles(L){
+    const R=[[1,5,2,10],[2,15,4,30],[10,50,10,100]][L];
+    if(Math.random()<.55){ const n=ri(R[0],R[1]); return {big:`Le double de ${n}`,ans:2*n,speak:`Quel est le double de ${n} ?`,expl:`Le double de ${n}, c'est ${n} + ${n} = ${2*n}.`}; }
+    const n=ri(R[2]/2,R[3]/2)*2; return {big:`La moitié de ${n}`,ans:n/2,speak:`Quelle est la moitié de ${n} ?`,expl:`La moitié de ${n}, c'est ${n/2}, car ${n/2} + ${n/2} = ${n}.`};
+  },
+  tables(L){
+    const t=L===1?pick([2,5,10]):ri(2,L===2?9:10), b=ri(1,10);
+    if(L>=3&&Math.random()<.25) return {big:`${t} × ? = ${t*b}`,ans:b,speak:`${t} fois combien égale ${t*b} ?`,expl:`${t} × ${b} = ${t*b}.`};
+    const [x,y]=Math.random()<.5?[t,b]:[b,t];
+    return {big:`${x} × ${y}`,ans:x*y,speak:`${x} fois ${y}`,expl:`${x} × ${y} = ${x*y}.`+(L===1&&y<=5?` C'est ${Array(y).fill(x).join(" + ")}.`:"")};
+  },
+  multiplication(L){
+    if(L<=3){ const a=L===2?ri(11,40):ri(12,99), b=L===2?ri(2,5):ri(2,9), d=Math.floor(a/10)*10, u=a%10;
+      return {big:`${a} × ${b}`,ans:a*b,speak:`${a} fois ${b}`,expl:`${a} × ${b} = (${d} × ${b}) + (${u} × ${b}) = ${d*b} + ${u*b} = ${a*b}.`}; }
+    const a=ri(11,60), b=ri(11,25), d=Math.floor(b/10)*10, u=b%10;
+    return {big:`${a} × ${b}`,ans:a*b,speak:`${a} fois ${b}`,expl:`${a} × ${b} = (${a} × ${d}) + (${a} × ${u}) = ${a*d} + ${a*u} = ${fr(a*b)}.`};
+  },
+  x10(L){
+    if(L===2){ const n=ri(2,99), k=pick([10,100]); return {big:`${n} × ${k}`,ans:n*k,speak:`${n} fois ${k}`,expl:`Multiplier par ${k}, c'est ajouter ${k===10?"un zéro":"deux zéros"} à la fin d'un nombre entier : ${fr(n*k)}.`}; }
+    if(L===3){ if(Math.random()<.5){ const n=ri(2,99), k=pick([10,100,1000]); return {big:`${n} × ${fr(k)}`,ans:n*k,speak:`${n} fois ${k}`,expl:`${n} × ${fr(k)} = ${fr(n*k)} : chaque chiffre devient ${fr(k)} fois plus grand.`}; }
+      const n=ri(2,99)*100, k=pick([10,100]); return {big:`${fr(n)} ÷ ${k}`,ans:n/k,speak:`${n} divisé par ${k}`,expl:`Diviser par ${k}, c'est rendre chaque chiffre ${k} fois plus petit : ${fr(n/k)}.`}; }
+    if(Math.random()<.6){ const x=ri(11,999)/100, k=pick([10,100]); return {big:`${fr(x)} × ${k}`,ans:clean(x*k),speak:`${fr(x)} fois ${k}`,expl:`Multiplier par ${k} décale les chiffres de ${k===10?"un rang":"deux rangs"} vers la gauche : ${fr(x*k)}.`}; }
+    const n=ri(11,999), k=pick([10,100]); return {big:`${n} ÷ ${k}`,ans:clean(n/k),speak:`${n} divisé par ${k}`,expl:`Diviser par ${k} décale les chiffres de ${k===10?"un rang":"deux rangs"} vers la droite : ${fr(n/k)}.`};
+  },
+  division(L){
+    if(L===1){ const k=ri(2,5), q=ri(2,5), N=k*q; return {txt:`${N} bonbons à partager entre ${k} enfants. Combien pour chacun ?`,vis:vObjects(N),ans:q,expl:`${N} partagé en ${k}, ça fait ${q} chacun, car ${k} × ${q} = ${N}.`}; }
+    if(L===2){ const b=ri(2,9), q=ri(2,10), a=b*q; return {big:`${a} ÷ ${b}`,ans:q,speak:`${a} divisé par ${b}`,expl:`${a} ÷ ${b} = ${q}, car ${b} × ${q} = ${a}.`}; }
+    if(L===3){ const b=ri(2,9), q=ri(3,12), r=ri(1,b-1), a=b*q+r, askQ=Math.random()<.55;
+      return {txt:askQ?"Quel est le quotient ?":"Quel est le reste ?",big:`${a} ÷ ${b}`,ans:askQ?q:r,speak:`Dans ${a} divisé par ${b}, quel est le ${askQ?"quotient":"reste"} ?`,expl:`${a} = (${b} × ${q}) + ${r} : le quotient est ${q} et le reste ${r}.`}; }
+    const b=ri(2,9), q=ri(12,99), a=b*q; return {big:`${a} ÷ ${b}`,ans:q,speak:`${a} divisé par ${b}`,expl:`${a} ÷ ${b} = ${q}, car ${b} × ${q} = ${a}.`};
+  },
+  heure(L){
+    const lab=(H,M)=>M?`${H} h ${pad2(M)}`:`${H} h`;
+    if(L>=3&&Math.random()<.35){
+      const h=ri(8,17), m=ri(0,11)*5, d=pick([15,20,30,40,45]), t=h*60+m+d, H=Math.floor(t/60), M=t%60, ok=lab(H,M);
+      const set=new Set([ok]); [[H,(M+10)%60],[H+1,M],[H,(M+55)%60],[H-1,M]].forEach(([a,b])=>{ if(set.size<3) set.add(lab(a,b)); });
+      return {txt:`Il est ${lab(h,m)}. Quelle heure sera-t-il dans ${d} minutes ?`,opts:shuffle([...set]).map(l=>({label:l,val:l,sm:true})),ans:ok,
+        expl:`${lab(h,m)} + ${d} min = ${ok}.`};
+    }
+    const h=ri(1,12), M=[[0],[0,30],[0,15,30,45],[...Array(12).keys()].map(i=>i*5),[...Array(12).keys()].map(i=>i*5)][L], m=pick(M), ok=lab(h,m);
+    const set=new Set([ok]), nx=h%12+1, pv=h===1?12:h-1;
+    const cands=shuffle([[nx,m],[pv,m],[h,(m+30)%60],[h,(m+15)%60],[m?Math.round(m/5)||12:h,h%12*5]]);
+    for(const [a,b] of cands){ if(set.size>=3) break; set.add(lab(a,b)); }
+    return {txt:"Quelle heure est-il ?",vis:vClock(h,m),opts:shuffle([...set]).map(l=>({label:l,val:l,sm:true})),ans:ok,
+      expl: m===0?`Il est ${h} h : la grande aiguille est sur le 12, la petite sur le ${h}.`:`Il est ${ok}. La grande aiguille donne les minutes : chaque chiffre vaut 5 minutes (sur le 3 = 15 min, sur le 6 = 30 min).`};
+  },
+  monnaie(L){
+    if(L>=3){
+      const pay=L===3?20:50, price=L===3?ri(3,19):clean(ri(10,89)*0.5), r=clean(pay-price);
+      return {txt:`Tu achètes un jouet à ${fr(price)} €. Tu paies avec un billet de ${pay} €. Combien te rend-on ?`,ans:r,
+        expl:`${pay} − ${fr(price)} = ${fr(r)} €.`};
+    }
+    const V=[[1,2],[1,2,5,10],[0.5,1,2,5,10,20]][L], max=[10,40,60][L]; const it=[]; let s=0;
+    const n=ri(2,L===0?4:5); for(let i=0;i<n;i++){ const ok=V.filter(v=>s+v<=max); if(!ok.length) break; const v=pick(ok); it.push(v); s=clean(s+v); }
+    it.sort((a,b)=>b-a);
+    return {txt:"Combien d'euros en tout ?",vis:vMoney(it),ans:s,expl:`${it.map(fr).join(" + ")} = ${fr(s)} €.`+(L===2?" Deux pièces de 50 c font 1 €.":"")};
+  },
+  mesures(L){
+    const T=[
+      [[()=>{const k=ri(1,9);return[`${k} m = ? cm`,k*100,"1 m = 100 cm."]}],[()=>{const k=ri(1,9);return[`${k} kg = ? g`,k*1000,"1 kg = 1 000 g."]}],[()=>{const k=ri(1,5);return[`${k} h = ? min`,k*60,"1 h = 60 min."]}],[()=>{const k=ri(2,9);return[`${k*100} cm = ? m`,k,"100 cm = 1 m."]}]],
+      [[()=>{const k=ri(1,9);return[`${k} km = ? m`,k*1000,"1 km = 1 000 m."]}],[()=>{const k=ri(1,9);return[`${k} L = ? cL`,k*100,"1 L = 100 cL."]}],[()=>{const k=ri(2,30);return[`${k} cm = ? mm`,k*10,"1 cm = 10 mm."]}],[()=>{const k=ri(2,5);return[`${k} min = ? s`,k*60,"1 min = 60 s."]}],[()=>{const h=ri(1,3),m=ri(1,11)*5;return[`${h} h ${m} min = ? min`,h*60+m,`${h} h = ${h*60} min, plus ${m} min.`]}]],
+      [[()=>{const x=ri(11,95)/10;return[`${fr(x)} km = ? m`,clean(x*1000),"1 km = 1 000 m."]}],[()=>{const x=ri(11,49)/10;return[`${fr(x)} kg = ? g`,clean(x*1000),"1 kg = 1 000 g."]}],[()=>{const x=ri(11,49)/10;return[`${fr(x)} L = ? cL`,clean(x*100),"1 L = 100 cL."]}],[()=>{const x=pick([1.5,2.5,0.5,3.5]);return[`${fr(x)} h = ? min`,x*60,"1 h = 60 min, et une demi-heure = 30 min."]}],[()=>{const k=ri(110,990);return[`${k} cm = ? m`,clean(k/100),"100 cm = 1 m."]}]]
+    ][L-2];
+    const [b,ans,rule]=pick(T)[0]();
+    return {txt:"Convertis :",big:b,ans,speak:b.replace("?","combien de").replace("=","égale"),expl:`${rule} Donc ${b.replace("?",fr(ans))}.`};
+  },
+  geometrie(L){
+    if(L===0){ const k=pick(["carré","rectangle","triangle","cercle"]);
+      return {txt:"Comment s'appelle cette figure ?",vis:vShape(k),opts:shuffle(["carré","rectangle","triangle","cercle"]).map(l=>({label:l[0].toUpperCase()+l.slice(1),val:l,sm:true})),ans:k,long:true,
+        expl:{carré:"Le carré a 4 côtés de même longueur.",rectangle:"Le rectangle a 4 côtés : 2 longs et 2 courts.",triangle:"Le triangle a 3 côtés.",cercle:"Le cercle est tout rond, il n'a pas de côté."}[k]}; }
+    if(L===1){ const k=pick(["triangle","carré","rectangle","pentagone","hexagone"]), n={triangle:3,carré:4,rectangle:4,pentagone:5,hexagone:6}[k];
+      return {txt:"Combien de côtés a cette figure ?",vis:vShape(k),ans:n,expl:`C'est un ${k} : il a ${n} côtés.`}; }
+    const lab=(x,y,t)=>`<text x="${x}" y="${y}" text-anchor="middle" font-family="Fredoka,Arial" font-weight="700" font-size="18" fill="var(--ink)">${t}</text>`;
+    if(L===2){ const c=ri(2,9); return {txt:`Un carré a des côtés de ${c} cm. Quel est son périmètre (en cm) ?`,vis:vShape("carré",lab(100,160,c+" cm")),ans:4*c,expl:`Le périmètre, c'est le tour : ${c} + ${c} + ${c} + ${c} = 4 × ${c} = ${4*c} cm.`}; }
+    const Lo=ri(4,15), la=ri(2,Lo-1), aire=L===4&&Math.random()<.6;
+    const vis=vShape("rectangle",lab(100,155,Lo+" cm")+lab(30,92,la+" cm"));
+    return aire ? {txt:`Un rectangle mesure ${Lo} cm sur ${la} cm. Quelle est son aire (en cm²) ?`,vis,ans:Lo*la,expl:`Aire du rectangle = longueur × largeur = ${Lo} × ${la} = ${Lo*la} cm².`}
+                : {txt:`Un rectangle mesure ${Lo} cm sur ${la} cm. Quel est son périmètre (en cm) ?`,vis,ans:2*(Lo+la),expl:`Périmètre = 2 × (longueur + largeur) = 2 × (${Lo} + ${la}) = ${2*(Lo+la)} cm.`};
+  },
+  fractions(L){
+    if(Math.random()<.35){ const n=pick([2,3,4,5,6,8]), k=ri(1,n-1), ok=`${k}/${n}`;
+      const set=new Set([ok]); [`${n-k}/${n}`,`${n}/${k}`,`${k}/${n+1}`,`${k+1}/${n}`].forEach(x=>{ if(set.size<3&&x!==ok) set.add(x); });
+      return {txt:"Quelle fraction de la barre est coloriée ?",vis:vFraction(n,k),opts:shuffle([...set]).map(l=>({label:l,val:l,sm:true})),ans:ok,
+        expl:`La barre est partagée en ${n} parts égales, et ${k} sont coloriées : ${ok}.`}; }
+    if(L===3){ const b=pick([2,3,4,5,10]), N=b*ri(2,10); return {txt:`Combien font 1/${b} de ${N} ?`,big:`1/${b} de ${N}`,ans:N/b,speak:`Combien fait un ${({2:"demi",3:"tiers",4:"quart",5:"cinquième",10:"dixième"})[b]} de ${N} ?`,expl:`Pour prendre 1/${b}, on partage en ${b} : ${N} ÷ ${b} = ${N/b}.`}; }
+    if(Math.random()<.5){ const b=pick([2,4,5,10]); let a=ri(1,b-1); return {txt:"Écris cette fraction en nombre à virgule :",big:`${a}/${b}`,ans:clean(a/b),expl:`${a}/${b} = ${a} ÷ ${b} = ${fr(a/b)}.`}; }
+    const b=pick([3,4,5,8,10]), a=ri(2,b-1), N=b*ri(2,10);
+    return {txt:`Combien font ${a}/${b} de ${N} ?`,big:`${a}/${b} de ${N}`,ans:N/b*a,expl:`On partage ${N} en ${b} : ${N/b}. Puis on prend ${a} parts : ${N/b} × ${a} = ${N/b*a}.`};
+  },
+  decimaux(L){
+    let a,b,plus=Math.random()<.6;
+    if(L===3){ a=ri(11,99)/10; b=ri(11,99)/10; } else { a=ri(101,999)/100; b=ri(11,99)/10; }
+    if(!plus&&b>a) [a,b]=[b,a];
+    const r=clean(plus?a+b:a-b);
+    return {big:`${fr(a)} ${plus?"+":"−"} ${fr(b)}`,ans:r,speak:`${fr(a)} ${plus?"plus":"moins"} ${fr(b)}`,expl:`On aligne les virgules (unités sous unités, dixièmes sous dixièmes) : ${fr(a)} ${plus?"+":"−"} ${fr(b)} = ${fr(r)}.`};
+  },
+  problemes(L){
+    const [nm,pr]=pick(NAMES), Pr=pr==="il"?"Il":"Elle";
+    const T=[
+      [()=>{const a=ri(2,8),b=ri(1,10-a);return[`${nm} a ${a} billes. ${Pr} en gagne ${b}. Combien de billes a-t-${pr} maintenant ?`,a+b,`${a} + ${b} = ${a+b}.`]},
+       ()=>{const a=ri(4,10),b=ri(1,a-1);return[`Il y a ${a} oiseaux sur un arbre. ${b} s'envolent. Combien en reste-t-il ?`,a-b,`${a} − ${b} = ${a-b}.`]}],
+      [()=>{const a=ri(12,60),b=ri(5,30);return[`Dans le bus, il y a ${a} personnes. ${b} personnes montent. Combien y a-t-il de personnes dans le bus ?`,a+b,`${a} + ${b} = ${a+b}.`]},
+       ()=>{const k=ri(2,9);return[`Une boîte contient 10 crayons. Combien de crayons y a-t-il dans ${k} boîtes ?`,10*k,`${k} × 10 = ${10*k}.`]},
+       ()=>{const a=ri(30,90),b=ri(5,a-10);return[`${nm} a ${a} cartes. ${Pr} en donne ${b}. Combien lui en reste-t-il ?`,a-b,`${a} − ${b} = ${a-b}.`]}],
+      [()=>{const n=ri(4,9),k=ri(3,9);return[`Un paquet contient ${n} gâteaux. Combien de gâteaux y a-t-il dans ${k} paquets ?`,n*k,`${k} × ${n} = ${n*k}.`]},
+       ()=>{const k=ri(2,6),q=ri(3,9);return[`On partage ${k*q} cartes entre ${k} enfants. Combien de cartes reçoit chaque enfant ?`,q,`${k*q} ÷ ${k} = ${q}.`]},
+       ()=>{const P=ri(120,300),R=ri(40,P-20);return[`Un livre a ${P} pages. ${nm} en a lu ${R}. Combien de pages lui reste-t-il à lire ?`,P-R,`${P} − ${R} = ${P-R}.`]}],
+      [()=>{const k=ri(2,5),p=ri(2,4),s=ri(1,3);return[`${nm} achète ${k} cahiers à ${p} € chacun et un stylo à ${s} €. Combien paie-t-${pr} en tout ?`,k*p+s,`${k} × ${p} = ${k*p} €, puis ${k*p} + ${s} = ${k*p+s} €.`]},
+       ()=>{const N=ri(51,240);return[`Un car transporte 50 élèves. Combien de cars faut-il pour ${N} élèves ?`,Math.ceil(N/50),`${N} ÷ 50 = ${Math.floor(N/50)} reste ${N%50} : il faut un car de plus pour les ${N%50} derniers, donc ${Math.ceil(N/50)} cars.`]},
+       ()=>{const n=ri(12,25),p=ri(3,8);return[`Une classe de ${n} élèves part en sortie. Chaque billet coûte ${p} €. Combien coûtent tous les billets ?`,n*p,`${n} × ${p} = ${n*p} €.`]}],
+      [()=>{const u=pick([2,3,4]),p=pick([0.8,1.2,1.5,2.5]),v=ri(5,8);return[`${u} croissants coûtent ${fr(u*p)} €. Combien coûtent ${v} croissants ?`,clean(v*p),`1 croissant coûte ${fr(u*p)} ÷ ${u} = ${fr(p)} €, donc ${v} croissants coûtent ${v} × ${fr(p)} = ${fr(v*p)} €.`]},
+       ()=>{const h=ri(8,15),m=ri(0,11)*5,d=ri(7,30)*5,t=h*60+m+d;return[`Un train part à ${h} h ${pad2(m)} et arrive à ${Math.floor(t/60)} h ${pad2(t%60)}. Combien de minutes dure le trajet ?`,d,`De ${h} h ${pad2(m)} à ${Math.floor(t/60)} h ${pad2(t%60)}, il s'écoule ${d} minutes.`]},
+       ()=>{const p=ri(4,12)*10;return[`Un jeu coûte ${p} €. Pendant les soldes, son prix baisse de moitié. Combien coûte-t-il maintenant ?`,p/2,`La moitié de ${p}, c'est ${p/2} €.`]}]
+    ][L];
+    const [txt,ans,expl]=pick(T)();
+    return {txt,ans,expl,prob:true};
+  }
+};
+
+/* Propositions pour les plus petits */
+function numOpts(ans){
+  const s=new Set([ans]), dec=!Number.isInteger(ans);
+  const deltas=dec?[0.1,0.5,1]:ans<20?[1,2]:ans<200?[1,2,10]:[1,10,100];
+  let g=0; while(s.size<3&&g++<60){ const v=clean(ans+pick(deltas)*pick([-1,1])); if(v>=0) s.add(v); }
+  let k=1; while(s.size<3) s.add(ans+k++);
+  return shuffle([...s]).map(v=>({label:fr(v),val:v}));
+}
+function makeQ(topic,L){ const q=G[topic](L); q.topic=topic; if(!q.opts && L<=1) q.opts=numOpts(q.ans); return q; }
+
+/* ======================= PROFILS ET SAUVEGARDE ======================= */
+const KEY="defis-maths-v1";
+let DB={profiles:[],cur:null};
+try{ const s=JSON.parse(localStorage.getItem(KEY)); if(s&&Array.isArray(s.profiles)) DB=s; }catch(e){}
+const persist=()=>{ try{ localStorage.setItem(KEY,JSON.stringify(DB)); }catch(e){} };
+const me=()=>DB.profiles.find(p=>p.id===DB.cur);
+const AVATARS=["🦊","🐼","🐯","🐸","🐵","🦄","🐙","🐧","🦁","🐨"];
+const RANKS=["Explorateur","Aventurier","Chevalier des nombres","Magicien du calcul","Champion","Super-champion","Légende des maths"];
+const XP_STEP=300;
+const today=()=>{ const d=new Date(); return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`; };
+
+const BADGES=[
+  {id:"first",em:"🌱",nom:"Premier pas",txt:"Finir une première partie"},
+  {id:"perfect",em:"💯",nom:"Sans faute",txt:"10 sur 10 à l'entraînement"},
+  {id:"fast15",em:"⚡",nom:"Éclair",txt:"15 bonnes réponses en 1 minute"},
+  {id:"fast25",em:"🚀",nom:"Fusée",txt:"25 bonnes réponses en 1 minute"},
+  {id:"survive",em:"🛡️",nom:"Survivant",txt:"20 bonnes réponses en mode Survie"},
+  {id:"flawless",em:"💎",nom:"Diamant",txt:"Réussir le défi Sans faute"},
+  {id:"boss",em:"👑",nom:"Vainqueur du boss",txt:"Battre le Grand Boss"},
+  {id:"daily3",em:"📅",nom:"Fidèle",txt:"Faire 3 défis du jour"},
+  {id:"daily10",em:"🗓️",nom:"Super fidèle",txt:"Faire 10 défis du jour"},
+  {id:"c100",em:"🥉",nom:"100 réponses",txt:"100 bonnes réponses au total"},
+  {id:"c500",em:"🥈",nom:"500 réponses",txt:"500 bonnes réponses au total"},
+  {id:"c1000",em:"🥇",nom:"1 000 réponses",txt:"1 000 bonnes réponses au total"},
+  {id:"explorer",em:"🧭",nom:"Touche-à-tout",txt:"Jouer à tous les thèmes de sa classe"},
+  {id:"stars",em:"🌟",nom:"Collectionneur",txt:"3 étoiles dans 5 thèmes"}
+];
+
+/* ======================= VOIX ======================= */
+function say(t){ try{ const p=me(); if(!p||!("speechSynthesis" in window)) return; speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(t); u.lang="fr-FR"; u.rate=.9; speechSynthesis.speak(u); }catch(e){} }
+const sayAuto=t=>{ const p=me(); if(p&&p.voice) say(t); };
+const spoken=q=>(q.speak||q.txt||"")+(q.speak||!q.big?"":" "+q.big.replace(/×/g," fois ").replace(/÷/g," divisé par ").replace(/−/g," moins ").replace(/\+/g," plus ").replace(/\?/g," combien "));
+
+/* ======================= NAVIGATION ======================= */
+const SCREENS=["sProfiles","sEdit","sHome","sTopics","sSpecial","sPlay","sEnd","sBadges"];
+function show(id){ SCREENS.forEach(s=>$(s).classList.toggle("hidden",s!==id)); window.scrollTo(0,0); }
+document.querySelectorAll("[data-home]").forEach(b=>b.onclick=renderHome);
+
+function renderProfiles(){
+  $("profList").innerHTML=DB.profiles.map(p=>`<button class="prof" data-p="${p.id}"><span class="av">${p.av}</span><b>${esc(p.name)}</b><small>${LEVELS[p.L].c} · ${LEVELS[p.L].age}</small></button>`).join("")+
+    (DB.profiles.length<6?`<button class="prof add" id="addProf"><span class="av">＋</span><b>Nouveau</b><small>joueur</small></button>`:"");
+  document.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{ DB.cur=b.dataset.p; persist(); renderHome(); });
+  if($("addProf")) $("addProf").onclick=()=>openEdit(null);
+  show("sProfiles");
+}
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+let EDIT=null;
+function openEdit(p){
+  EDIT=p?{...p}:{id:null,name:"",av:pick(AVATARS),L:0,voice:false};
+  $("editTitle").textContent=p?"Réglages":"Nouveau joueur";
+  $("fName").value=EDIT.name;
+  $("fDelete").classList.toggle("hidden",!p);
+  const draw=()=>{
+    $("fAv").innerHTML=AVATARS.map(a=>`<button class="pick av ${a===EDIT.av?"on":""}" data-av="${a}">${a}</button>`).join("");
+    $("fLv").innerHTML=LEVELS.map((l,i)=>`<button class="pick ${i===EDIT.L?"on":""}" data-lv="${i}">${l.c}<br><small class="muted">${l.age}</small></button>`).join("");
+    $("fVoice").textContent=EDIT.voice?"Oui":"Non"; $("fVoice").classList.toggle("on",EDIT.voice);
+    document.querySelectorAll("[data-av]").forEach(b=>b.onclick=()=>{ EDIT.av=b.dataset.av; draw(); });
+    document.querySelectorAll("[data-lv]").forEach(b=>b.onclick=()=>{ EDIT.L=+b.dataset.lv; draw(); });
+  };
+  $("fVoice").onclick=()=>{ EDIT.voice=!EDIT.voice; draw(); if(EDIT.voice) say("La voix est activée."); };
+  draw(); show("sEdit");
+}
+$("editBack").onclick=()=>me()?renderHome():renderProfiles();
+$("fSave").onclick=()=>{
+  const name=$("fName").value.trim(); if(!name){ $("fName").focus(); return; }
+  if(EDIT.id){ Object.assign(me(),{name,av:EDIT.av,L:EDIT.L,voice:EDIT.voice}); }
+  else { const p={id:"p"+Date.now(),name,av:EDIT.av,L:EDIT.L,voice:EDIT.voice,xp:0,total:0,stars:{},records:{},played:{},badges:[],daily:{last:"",count:0}}; DB.profiles.push(p); DB.cur=p.id; }
+  persist(); renderHome();
+};
+$("fDelete").onclick=()=>{ const p=me(); if(!p||!confirm(`Supprimer ${p.name} et tous ses progrès ?`)) return; DB.profiles=DB.profiles.filter(x=>x.id!==p.id); DB.cur=null; persist(); renderProfiles(); };
+
+function renderHome(){
+  const p=me(); if(!p) return renderProfiles();
+  $("hAv").textContent=p.av; $("hName").textContent=p.name;
+  const r=Math.min(Math.floor(p.xp/XP_STEP),RANKS.length-1);
+  $("hRank").textContent=`${RANKS[r]} · ${LEVELS[p.L].c} · ${p.xp} XP`;
+  $("hXp").style.width=(r===RANKS.length-1?100:(p.xp%XP_STEP)/XP_STEP*100)+"%";
+  const done=p.daily.last===today();
+  $("dailyBtn").classList.toggle("done",done);
+  $("dailyTxt").textContent=done?"Déjà fait aujourd'hui, bravo ! Tu peux rejouer pour t'entraîner.":"10 questions surprises, +50 XP bonus";
+  $("badgeCount").textContent=`${p.badges.length} / ${BADGES.length}`;
+  show("sHome");
+}
+$("switchBtn").onclick=()=>{ DB.cur=null; persist(); renderProfiles(); };
+$("settingsBtn").onclick=()=>openEdit(me());
+
+/* ======================= MENUS ======================= */
+function renderTopics(mode){
+  const p=me(), L=p.L, list=topicsFor(L);
+  $("topicsTitle").textContent=mode==="train"?"S'entraîner":"Défis chrono · 1 minute";
+  let html="";
+  if(mode==="chrono"){ const rec=p.records[L+":chrono:mix"]; html+=`<button class="item" data-t="mix"><span class="em">🎲</span><span><b>Tout mélangé</b><small>tous les thèmes de ${LEVELS[L].c}</small></span><span class="right">${rec!=null?"🏅 "+rec:""}</span></button>`; }
+  html+=list.map(t=>{ const s=p.stars[L+":"+t.id]||0, rec=p.records[L+":chrono:"+t.id];
+    return `<button class="item" data-t="${t.id}"><span class="em">${t.em}</span><span><b>${t.nom}</b><small>${mode==="train"?"10 questions":"le plus possible en 1 minute"}</small></span>
+      <span class="right">${mode==="train"?"★".repeat(s)+'<span style="color:var(--border)">'+"★".repeat(3-s)+"</span>":(rec!=null?"🏅 "+rec:"")}</span></button>`; }).join("");
+  $("topicList").innerHTML=html;
+  document.querySelectorAll("#topicList [data-t]").forEach(b=>b.onclick=()=>{ const t=b.dataset.t;
+    if(mode==="train") start({mode:"train",topics:[t],total:10,label:TOPICS.find(x=>x.id===t).nom});
+    else start({mode:"chrono",key:"chrono:"+t,topics:t==="mix"?topicsFor(L).map(x=>x.id):[t],time:60,label:t==="mix"?"Tout mélangé":TOPICS.find(x=>x.id===t).nom}); });
+  show("sTopics");
+}
+$("goTrain").onclick=()=>renderTopics("train");
+$("goChrono").onclick=()=>renderTopics("chrono");
+
+const SPECIALS=[
+  {id:"eclair",em:"⚡",nom:"Éclair",txt:"30 secondes, tous les thèmes",cfg:L=>({time:30})},
+  {id:"tables",em:"✖️",nom:"Maître du calcul",txt:"1 minute de calcul rapide",cfg:L=>({time:60,topics:L===0?["addition","soustraction"]:["tables"]})},
+  {id:"survie",em:"❤️",nom:"Survie",txt:"Sans chrono : 3 vies, tiens le plus longtemps",cfg:L=>({lives:3})},
+  {id:"sansfaute",em:"💎",nom:"Sans faute",txt:"Sans chrono : 15 questions, aucune erreur permise",cfg:L=>({total:15,stopOnError:true})},
+  {id:"boss",em:"👑",nom:"Le Grand Boss",txt:"20 questions en 3 minutes. 16 bonnes réponses pour gagner",cfg:L=>({total:20,time:180})}
+];
+function renderSpecial(){
+  const p=me(), L=p.L;
+  $("specialList").innerHTML=SPECIALS.map(s=>{ const rec=p.records[L+":"+s.id];
+    return `<button class="item" data-s="${s.id}"><span class="em">${s.em}</span><span><b>${s.nom}</b><small>${s.txt}</small></span><span class="right">${rec!=null?"🏅 "+rec:""}</span></button>`; }).join("");
+  document.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{ const s=SPECIALS.find(x=>x.id===b.dataset.s);
+    start({mode:s.id,key:s.id,label:s.nom,topics:topicsFor(L).map(x=>x.id),...s.cfg(L)}); });
+  show("sSpecial");
+}
+$("goSpecial").onclick=renderSpecial;
+$("dailyBtn").onclick=()=>start({mode:"daily",label:"Défi du jour",topics:topicsFor(me().L).map(x=>x.id),total:10});
+$("goBadges").onclick=()=>{
+  const p=me();
+  $("badgeList").innerHTML=BADGES.map(b=>`<div class="badge ${p.badges.includes(b.id)?"":"off"}"><span class="em">${b.em}</span><b>${b.nom}</b><small>${b.txt}</small></div>`).join("");
+  show("sBadges");
+};
+
+/* ======================= MOTEUR DE JEU ======================= */
+let S=null, timer=null;
+function start(cfg){
+  const p=me();
+  S={...cfg,L:p.L,i:0,ok:0,bad:0,lives:cfg.lives||null,left:cfg.time||null,q:null,typed:"",lock:false,xp:0,lastTopic:null};
+  $("barWrap").className="bar"+(S.time?" time":"");
+  clearInterval(timer);
+  if(S.time){ timer=setInterval(()=>{ S.left--; hud(); if(S.left<=0) finish(); },1000); }
+  show("sPlay"); next();
+}
+function hud(){
+  $("hudLeft").textContent=`⭐ ${S.ok}`;
+  if(S.time){ $("hudRight").textContent=`⏱️ ${Math.max(0,S.left)} s`; $("bar").style.width=(Math.max(0,S.left)/S.time*100)+"%"; }
+  else if(S.lives){ $("hudRight").textContent="❤️".repeat(S.lives)+"🤍".repeat(3-S.lives); $("bar").style.width="0%"; $("barWrap").classList.add("hidden"); }
+  else { $("hudRight").textContent=`${Math.min(S.i+1,S.total)} / ${S.total}`; $("bar").style.width=(S.i/S.total*100)+"%"; }
+  if(!S.lives) $("barWrap").classList.remove("hidden");
+}
+function next(){
+  if(S.total&&S.i>=S.total) return finish();
+  let t=pick(S.topics); if(S.topics.length>2) while(t===S.lastTopic) t=pick(S.topics);
+  S.lastTopic=t; S.q=makeQ(t,S.L); S.typed=""; S.lock=false;
+  const q=S.q;
+  $("qTxt").textContent=q.txt||""; $("qTxt").classList.toggle("hidden",!q.txt);
+  $("qBig").textContent=q.big?q.big+((q.noEq||/\?/.test(q.big))?"":" = ?"):""; $("qBig").classList.toggle("hidden",!q.big);
+  $("qVis").innerHTML=q.vis||""; $("qVis").classList.toggle("hidden",!q.vis);
+  $("msg").textContent=""; $("msg").className="msg"; $("nextBtn").classList.add("hidden");
+  if(q.opts){
+    $("answer").innerHTML=`<div class="opts ${q.two?"two":q.long?"long":""}">${q.opts.map((o,i)=>`<button class="opt ${o.sm?"sm":""}" data-o="${i}">${o.label}</button>`).join("")}</div>`;
+    document.querySelectorAll("[data-o]").forEach(b=>b.onclick=()=>answer(q.opts[+b.dataset.o].val,+b.dataset.o));
+  } else {
+    const comma=S.L>=3;
+    $("answer").innerHTML=`<div class="typed" id="typed">&nbsp;</div><div class="pad">${[1,2,3,4,5,6,7,8,9].map(n=>`<button class="key" data-k="${n}">${n}</button>`).join("")}
+      <button class="key" data-k="del">⌫</button><button class="key" data-k="0">0</button><button class="key ${comma?"":"blank"}" data-k=",">,</button>
+      <button class="key ok" data-k="ok">Valider</button></div>`;
+    document.querySelectorAll("[data-k]").forEach(b=>b.onclick=()=>key(b.dataset.k));
+  }
+  hud(); sayAuto(spoken(q));
+}
+function key(k){
+  if(!S||S.lock||S.q.opts) return;
+  if(k==="del") S.typed=S.typed.slice(0,-1);
+  else if(k==="ok"){ if(S.typed&&S.typed!==",") answer(parseFloat(S.typed.replace(",",".")),null); return; }
+  else if(k===","){ if(S.L<3||S.typed.includes(",")) return; S.typed=(S.typed||"0")+","; }
+  else if(S.typed.length<7) S.typed+=k;
+  $("typed").innerHTML=S.typed||"&nbsp;";
+}
+document.addEventListener("keydown",e=>{
+  if($("sPlay").classList.contains("hidden")||!S) return;
+  if(/^[0-9]$/.test(e.key)) key(e.key); else if(e.key===","||e.key===".") key(","); else if(e.key==="Backspace") key("del"); else if(e.key==="Enter"){ if(!$("nextBtn").classList.contains("hidden")) $("nextBtn").click(); else key("ok"); }
+});
+function answer(v,idx){
+  if(S.lock) return; S.lock=true;
+  const q=S.q, p=me();
+  const good = typeof q.ans==="number" ? Math.abs(v-q.ans)<1e-9 : v===q.ans;
+  if(q.opts) document.querySelectorAll("[data-o]").forEach((b,i)=>{ b.disabled=true; if(q.opts[i].val===q.ans) b.classList.add("good"); else if(i===idx) b.classList.add("bad"); });
+  else $("typed").classList.add(good?"good":"bad");
+  p.played[S.L+":"+q.topic]=1;
+  if(good){ S.ok++; S.xp+=10; p.total++; } else { S.bad++; if(S.lives) S.lives--; }
+  S.i++;
+  const answerTxt = typeof q.ans==="number"?fr(q.ans):q.ans;
+  const over = (S.lives!=null&&S.lives<=0) || (S.stopOnError&&!good) || (S.total&&S.i>=S.total);
+  hud();
+  if(S.time){ // modes chronométrés : on enchaîne vite
+    $("msg").className="msg "+(good?"good":"bad");
+    $("msg").textContent=good?pick(BRAVO):`Réponse : ${answerTxt}`;
+    setTimeout(()=>{ if(!S||S.left<=0) return; over?finish():next(); }, good?450:1300);
+    return;
+  }
+  if(good){ $("msg").className="msg good"; $("msg").textContent=pick(BRAVO); sayAuto($("msg").textContent); setTimeout(()=>over?finish():next(),850); }
+  else {
+    $("msg").className="msg bad";
+    $("msg").innerHTML=`La bonne réponse est ${esc(answerTxt)}.<div class="expl">${q.expl}</div>`;
+    sayAuto(`La bonne réponse est ${answerTxt}.`);
+    $("nextBtn").textContent=over?"Voir le résultat":"Suivant"; $("nextBtn").classList.remove("hidden");
+    $("nextBtn").onclick=()=>over?finish():next();
+  }
+}
+$("quitBtn").onclick=()=>{ clearInterval(timer); try{speechSynthesis.cancel();}catch(e){} S=null; renderHome(); };
+$("speakBtn").onclick=()=>{ if(S&&S.q) say(spoken(S.q)); };
+
+/* ======================= FIN DE PARTIE ======================= */
+function finish(){
+  if(!S||S.ended) return; S.ended=true; clearInterval(timer);
+  const p=me(), L=S.L; let top="", title="", txt="", bonus=0;
+  const starsOf=(ok,tot)=>ok===tot?3:ok>=tot*0.8?2:ok>=tot*0.5?1:0;
+  const starHtml=s=>`<div class="stars">${"★".repeat(s)}<span class="off">${"★".repeat(3-s)}</span></div>`;
+  const rec=(k,v)=>{ const key=L+":"+k, old=p.records[key]; if(old==null||v>old){ p.records[key]=v; return old!=null||v>0; } return false; };
+
+  if(S.mode==="train"){ const s=starsOf(S.ok,S.total), k=L+":"+S.topics[0]; if(s>(p.stars[k]||0)) p.stars[k]=s;
+    top=starHtml(s); title=s===3?"Sans faute !":s>0?"Bien joué !":"On recommence ?"; txt=`${S.ok} bonne${S.ok>1?"s":""} réponse${S.ok>1?"s":""} sur ${S.total}.`;
+    if(S.ok===S.total) give("perfect"); }
+  else if(S.mode==="daily"){ const s=starsOf(S.ok,S.total);
+    if(p.daily.last!==today()){ p.daily.last=today(); p.daily.count++; bonus=50; }
+    top=starHtml(s); title="Défi du jour terminé !"; txt=`${S.ok} sur ${S.total}.`+(bonus?" Bonus : +50 XP !":"");
+    if(p.daily.count>=3) give("daily3"); if(p.daily.count>=10) give("daily10"); }
+  else if(S.mode==="sansfaute"){ const win=S.ok===S.total; rec("sansfaute",S.ok);
+    top=`<div class="score">${S.ok} / ${S.total}</div>`; title=win?"Parfait, aucune erreur !":"Raté de peu !"; txt=win?"Tu as réussi le défi Sans faute.":`Tu as tenu ${S.ok} question${S.ok>1?"s":""} sans erreur.`;
+    if(win){ give("flawless"); bonus=40; } }
+  else if(S.mode==="boss"){ const win=S.ok>=16; rec("boss",S.ok);
+    top=`<div class="score">${S.ok} / 20</div>`; title=win?"Le Boss est battu ! 👑":"Le Boss résiste…"; txt=win?"Incroyable, tu as gagné !":`Il fallait 16 bonnes réponses. Encore un effort !`;
+    if(win){ give("boss"); bonus=60; } }
+  else if(S.mode==="survie"){ const nr=rec("survie",S.ok);
+    top=`<div class="score">${S.ok}</div>`; title=nr?"Nouveau record !":"Bien résisté !"; txt=`${S.ok} bonne${S.ok>1?"s":""} réponse${S.ok>1?"s":""} avant de perdre tes 3 vies.`;
+    if(S.ok>=20) give("survive"); }
+  else { const nr=rec(S.key,S.ok);
+    top=`<div class="score">${S.ok}</div>`; title=nr?"Nouveau record ! 🏅":"Belle partie !"; txt=`${S.ok} bonne${S.ok>1?"s":""} réponse${S.ok>1?"s":""} en ${S.time} secondes.`;
+    if(S.time===60&&S.ok>=15) give("fast15"); if(S.time===60&&S.ok>=25) give("fast25"); }
+
+  p.xp+=S.xp+bonus;
+  give("first");
+  if(p.total>=100) give("c100"); if(p.total>=500) give("c500"); if(p.total>=1000) give("c1000");
+  if(topicsFor(L).every(t=>p.played[L+":"+t.id])) give("explorer");
+  if(Object.values(p.stars).filter(v=>v===3).length>=5) give("stars");
+  persist();
+
+  $("endTop").innerHTML=top; $("endTitle").textContent=title; $("endTxt").textContent=txt+` +${S.xp+bonus} XP`;
+  $("endBadges").innerHTML=NEW.map(id=>{ const b=BADGES.find(x=>x.id===id); return `<div class="newbadge"><span class="em">${b.em}</span><span><b>Nouveau badge : ${b.nom}</b><br><small class="muted">${b.txt}</small></span></div>`; }).join("");
+  sayAuto(title);
+  NEW=[];
+  const cfg={...S}; ["i","ok","bad","q","typed","lock","xp","ended","left","lastTopic"].forEach(k=>delete cfg[k]);
+  cfg.lives = S.mode==="survie"?3:null;
+  $("againBtn").onclick=()=>start(cfg);
+  $("endHome").onclick=renderHome;
+  show("sEnd");
+}
+let NEW=[];
+function give(id){ const p=me(); if(!p.badges.includes(id)){ p.badges.push(id); NEW.push(id); } }
+
+/* ======================= DÉMARRAGE ======================= */
+me()?renderHome():renderProfiles();
+</script>
+</body>
+</html>
